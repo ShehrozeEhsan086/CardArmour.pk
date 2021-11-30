@@ -4,10 +4,13 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import LoginForm from "./Login/login";
+import SignUp from "./SignUp/signup";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 ReactDOM.render(
   <React.StrictMode>
-    <LoginForm />
+    {/* <LoginForm /> */}
+    <SignUp />;
   </React.StrictMode>,
   document.getElementById("root")
 );

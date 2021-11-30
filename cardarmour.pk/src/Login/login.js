@@ -31,7 +31,7 @@ const Login = () => {
           className="p-shadow-24"
           style={{ marginLeft: "35%", marginTop: "3%", marginRight: "35%" }}
         >
-          <Card title="">
+          <Card title="" style={{ backgroundColor: "rgb(238, 252, 255)" }}>
             <p className="LoginTag">Login</p>
             <p className="WelcomeTag">Welcome Back!</p>
 

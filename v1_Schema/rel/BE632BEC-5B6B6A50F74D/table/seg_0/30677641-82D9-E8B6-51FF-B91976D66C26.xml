@@ -59,7 +59,7 @@
 <colUsage columnID="768636A5-5B5F-65A0-305F-27663D910E7F"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="6D32592B-E1C6-7355-4ECD-A1EFEAE18FBC" name="Customer Bank Account_Customer_FK">
+<ind_PK_UK id="6D32592B-E1C6-7355-4ECD-A1EFEAE18FBC" name="Customer_FK">
 <createdBy>Shehroze</createdBy>
 <createdTime>2021-11-28 11:40:42 UTC</createdTime>
 <ownerDesignName>v1_Schema</ownerDesignName>
@@ -69,7 +69,7 @@
 <colUsage columnID="0E46825F-1FBF-E14F-E1A0-1D82BE6283E7"/>
 </indexColumnUsage>
 </ind_PK_UK>
-<ind_PK_UK id="DBC734CF-C4ED-E743-4BD7-648D7374EEB1" name="Customer Bank Account_Bank Account_FK">
+<ind_PK_UK id="DBC734CF-C4ED-E743-4BD7-648D7374EEB1" name=" Account_FK">
 <createdBy>Shehroze</createdBy>
 <createdTime>2021-11-28 11:40:52 UTC</createdTime>
 <ownerDesignName>v1_Schema</ownerDesignName>

@@ -29,9 +29,20 @@ const Login = () => {
         </Row>
         <Row
           className="p-shadow-24"
-          style={{ marginLeft: "35%", marginTop: "3%", marginRight: "35%" }}
+          style={{
+            marginLeft: "35%",
+            marginTop: "3%",
+            marginRight: "35%",
+            borderRadius: "5%",
+          }}
         >
-          <Card title="" style={{ backgroundColor: "rgb(238, 252, 255)" }}>
+          <Card
+            title=""
+            style={{
+              backgroundColor: "rgb(238, 252, 255)",
+              borderRadius: "5%",
+            }}
+          >
             <p className="LoginTag">Login</p>
             <p className="WelcomeTag">Welcome Back!</p>
 
@@ -73,9 +84,10 @@ const Login = () => {
               label="Reset Password?"
               className="p-button-text"
               style={{
-                marginLeft: "71%",
+                marginLeft: "75%",
                 marginBottom: "6%",
-                marginTop: "-7%",
+                marginTop: "-8%",
+                fontSize: "small",
               }}
             />
             <div className="p-field-checkbox">
@@ -116,11 +128,13 @@ const Login = () => {
                 style={{ marginLeft: "2%", marginBottom: "5%" }}
               />
 
-              <p style={{ marginLeft: "16%" }}>Dont have an account?</p>
+              <p style={{ marginLeft: "16%", marginTop: "3%" }}>
+                Dont have an account?
+              </p>
               <Button
                 label="Sign up now"
                 className="p-button-text"
-                style={{ marginLeft: "19%", marginTop: "-3%" }}
+                style={{ marginLeft: "19%", marginTop: "-5%" }}
               />
             </div>
           </Card>

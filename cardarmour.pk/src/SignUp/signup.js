@@ -29,6 +29,7 @@ const SignUp = () => {
         <Col xs={2}>
           <Card
             style={{
+              borderRadius: "20px",
               marginLeft: "20%",
               marginTop: "30%",
               backgroundColor: "white",
@@ -60,6 +61,7 @@ const SignUp = () => {
         <Col xs={10}>
           <Card
             style={{
+              borderRadius: "3%",
               marginTop: "3%",
               marginLeft: "5.5%",
               marginRight: "25%",
@@ -74,7 +76,11 @@ const SignUp = () => {
                 <Button
                   icon="pi pi-times"
                   className="p-button-rounded p-button-danger p-button-text"
-                  style={{ marginLeft: "78%", marginBottom: "6%" }}
+                  style={{
+                    marginLeft: "78%",
+                    marginBottom: "6%",
+                    marginTop: "-5%",
+                  }}
                 />
               </Col>
             </Row>
@@ -145,7 +151,7 @@ const SignUp = () => {
                 />
               </div>
               <div className="p-field p-col-6">
-                <label htmlFor="email" style={{ marginLeft: "48%" }}>
+                <label htmlFor="email" style={{ marginLeft: "44%" }}>
                   Email
                 </label>
                 <InputText
@@ -155,7 +161,7 @@ const SignUp = () => {
                 />
               </div>
               <div className="p-field p-col-12 p-md-6">
-                <label htmlFor="country" style={{ marginLeft: "40%" }}>
+                <label htmlFor="country" style={{ marginLeft: "43%" }}>
                   Country
                 </label>
                 <Dropdown
@@ -168,7 +174,7 @@ const SignUp = () => {
                 />
               </div>
               <div className="p-field p-col-12 p-md-6">
-                <label htmlFor="city" style={{ marginLeft: "40%" }}>
+                <label htmlFor="city" style={{ marginLeft: "45%" }}>
                   City
                 </label>
                 <Dropdown

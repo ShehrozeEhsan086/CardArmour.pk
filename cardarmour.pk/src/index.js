@@ -6,11 +6,13 @@ import reportWebVitals from "./reportWebVitals";
 import LoginForm from "./Login/login";
 import SignUp from "./SignUp/signup";
 import "bootstrap/dist/css/bootstrap.min.css";
+import Homepage from "./Homepage/homepage";
 
 ReactDOM.render(
   <React.StrictMode>
     {/* <LoginForm /> */}
-    <SignUp />;
+    {/* <SignUp /> */}
+    <Homepage />
   </React.StrictMode>,
   document.getElementById("root")
 );

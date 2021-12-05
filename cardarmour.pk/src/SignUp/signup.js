@@ -16,7 +16,12 @@ const SignUp = () => {
     <div
       style={{
         backgroundImage: "url(background.jpg)",
-        height: "100vh",
+        position: "fixed",
+        width: "100%",
+        height: "100%",
+        top: "0px",
+        left: "0px",
+        zIndex: "1000",
       }}
     >
       <Row>

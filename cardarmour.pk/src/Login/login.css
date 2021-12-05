@@ -31,3 +31,10 @@
   margin-left: 29%;
   margin-top: -3%;
 }
+
+.pending {
+  font-family: "Poppins", sans-serif;
+  color: rgb(34, 40, 77);
+  margin-left: 45%;
+  margin-top: 50%;
+}

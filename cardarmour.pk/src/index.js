@@ -7,12 +7,20 @@ import LoginForm from "./Login/login";
 import SignUp from "./SignUp/signup";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Homepage from "./Homepage/homepage";
+import PaymentMethod from "./PaymentMethod/paymentmethod";
+import Feedback from "./UserFeedback/Feedback";
+import CardHistory from "./CardHistory/cardhistory";
+import Aboutus from "./Aboutus/aboutus";
 
 ReactDOM.render(
   <React.StrictMode>
     {/* <LoginForm /> */}
     {/* <SignUp /> */}
     <Homepage />
+    {/* <Feedback /> */}
+    {/* <PaymentMethod /> */}
+    {/* <CardHistory /> */}
+    {/* <Aboutus /> */}
   </React.StrictMode>,
   document.getElementById("root")
 );

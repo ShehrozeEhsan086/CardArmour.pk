@@ -7,11 +7,13 @@ import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 import Homepage from "./Homepage/homepage";
+import Feedback from "./UserFeedback/Feedback";
 
 function App() {
   // <LoginForm />;
   // <SignUp />;
-  <Homepage />;
+  // <Homepage />;
+  <Feedback />;
 }
 
 export default App;

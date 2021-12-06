@@ -110,7 +110,7 @@ const PaymentMethod = () => {
             </div>
             <Button
               label="Sign Up"
-              className="p-button-outlined p-button-info"
+              className="p-button-rounded p-button-outlined"
               style={{
                 marginLeft: "28%",
                 marginTop: "2%",
@@ -119,8 +119,8 @@ const PaymentMethod = () => {
             />
             <Button
               label="Cancel"
-              className="p-button-outlined p-button-danger"
-              style={{ marginLeft: "6%", marginBottom: "5%" }}
+              className="p-button-rounded p-button-outlined"
+              style={{ color: "red", marginLeft: "6%", marginBottom: "5%" }}
             />
           </Card>
         </Col>

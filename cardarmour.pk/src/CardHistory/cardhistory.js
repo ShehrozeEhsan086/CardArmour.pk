@@ -19,7 +19,14 @@ const cardhistory = () => {
         <br></br>
       </div>
       <Row>
-        <Col md={10}>
+        <Col md={2}>
+          <Button
+            label="Return Home"
+            className="p-button-rounded p-button-outlined"
+            style={{ color: "yellow", marginLeft: "15%" }}
+          />
+        </Col>
+        <Col md={8}>
           <div>
             <h1 className="nameCard">CardArmour.pk</h1>
           </div>

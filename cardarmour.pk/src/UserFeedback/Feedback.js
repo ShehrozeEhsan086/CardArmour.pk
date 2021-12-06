@@ -59,13 +59,13 @@ const Feedback = () => {
               </Row>
               <Button
                 label="Submit"
-                className="p-button-rounded p-button-info"
+                className="p-button-rounded p-button-outlined"
                 style={{ marginLeft: "33%", marginTop: "2%" }}
               />
               <Button
                 label="Cancel"
-                className="p-button-rounded p-button-danger"
-                style={{ marginLeft: "5%" }}
+                className="p-button-rounded p-button-outlined"
+                style={{ color: "red", marginLeft: "5%" }}
               />
             </Card>
           </Col>

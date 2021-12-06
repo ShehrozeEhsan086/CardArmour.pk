@@ -1,5 +1,6 @@
 import "./aboutus.css";
 import { Card } from "primereact/card";
+import { Button } from "primereact/button";
 import { Col, Row } from "react-bootstrap";
 
 const aboutus = () => {
@@ -22,12 +23,21 @@ const aboutus = () => {
           <br></br>
         </Row>
         <Row>
-          <h1 className="nameCard1" style={{ marginLeft: "42%" }}>
-            CardArmour.pk
-          </h1>
+          <Col md={2}>
+            <Button
+              label="Return Home"
+              className="p-button-rounded p-button-outlined"
+              style={{ color: "yellow", marginLeft: "15%" }}
+            />
+          </Col>
+          <Col md={10}>
+            <h1 className="nameCard1" style={{ marginLeft: "30%" }}>
+              CardArmour.pk
+            </h1>
+          </Col>
         </Row>
         <Row>
-          <h4 className="nameCard1" style={{ marginLeft: "47%" }}>
+          <h4 className="nameCard1" style={{ marginLeft: "46.5%" }}>
             About Us
           </h4>
         </Row>

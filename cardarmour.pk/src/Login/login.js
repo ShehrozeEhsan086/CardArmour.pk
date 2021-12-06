@@ -156,7 +156,7 @@ const Login = () => {
               <Button
                 onClick={handleSubmit}
                 label="LOGIN"
-                className="p-button-outlined p-button-info"
+                className="p-button-rounded p-button-outlined"
                 style={{ marginLeft: "42%", marginTop: "2%" }}
               />
 

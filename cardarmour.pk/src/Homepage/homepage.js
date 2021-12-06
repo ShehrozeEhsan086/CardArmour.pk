@@ -51,13 +51,18 @@ const homepage = () => {
           <Col md={3}>
             <Button
               label="Setting"
-              className="p-button-rounded p-button-secondary"
-              style={{ marginLeft: "30%" }}
+              className="p-button-rounded p-button-outlined"
+              style={{ color: "white", marginLeft: "21%" }}
             />
             <Button
               label="About Us"
-              className="p-button-rounded p-button-secondary"
-              style={{ marginLeft: "8%" }}
+              className="p-button-rounded p-button-outlined"
+              style={{ color: "white", marginLeft: "3%" }}
+            />
+            <Button
+              label="Log Out"
+              className="p-button-rounded p-button-outlined"
+              style={{ color: "yellow", marginLeft: "3%" }}
             />
           </Col>
         </Row>

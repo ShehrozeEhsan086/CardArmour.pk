@@ -194,7 +194,7 @@ const SignUp = () => {
             </div>
             <Button
               label="Sign Up"
-              className="p-button-outlined p-button-info"
+              className="p-button-rounded p-button-outlined"
               style={{
                 marginLeft: "36.5%",
                 marginTop: "2%",
@@ -203,8 +203,8 @@ const SignUp = () => {
             />
             <Button
               label="Cancel"
-              className="p-button-outlined p-button-danger"
-              style={{ marginLeft: "10%", marginBottom: "5%" }}
+              className="p-button-rounded p-button-outlined"
+              style={{ color: "red", marginLeft: "10%", marginBottom: "5%" }}
             />
           </Card>
         </Col>

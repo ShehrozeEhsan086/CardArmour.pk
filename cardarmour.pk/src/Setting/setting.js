@@ -167,21 +167,13 @@ const Setting = () => {
                   <label htmlFor="firstname" style={{ marginLeft: "48%" }}>
                     Firstname
                   </label>
-                  <InputText
-                    id="firstname"
-                    type="text"
-                    placeholder="e.g. John"
-                  />
+                  <InputText id="firstname" type="text" placeholder="" />
                 </div>
                 <div className="p-field p-col-12 p-md-6">
                   <label htmlFor="lastname" style={{ marginLeft: "48%" }}>
                     Lastname
                   </label>
-                  <InputText
-                    id="lastname"
-                    type="text"
-                    placeholder="e.g. Wich"
-                  />
+                  <InputText id="lastname" type="text" placeholder="" />
                 </div>
                 <div
                   className="p-field p-col-12 p-md-3"
@@ -206,11 +198,7 @@ const Setting = () => {
                   >
                     CNIC
                   </label>
-                  <InputText
-                    id="cnic"
-                    type="text"
-                    placeholder="XXXXX-XXXXXXX-X"
-                  />
+                  <InputText id="cnic" type="text" placeholder="" />
                 </div>
                 <div
                   className="p-field p-col-12 p-md-2"
@@ -229,21 +217,13 @@ const Setting = () => {
                   <label htmlFor="number" style={{ marginLeft: "40%" }}>
                     Phone Number
                   </label>
-                  <InputText
-                    id="phonenumebr"
-                    type="text"
-                    placeholder="XXXX-XXXXXXX"
-                  />
+                  <InputText id="phonenumebr" type="text" placeholder="" />
                 </div>
                 <div className="p-field p-col-6">
                   <label htmlFor="email" style={{ marginLeft: "44%" }}>
                     Email
                   </label>
-                  <InputText
-                    id="email"
-                    type="text"
-                    placeholder="e.g. example@email.com"
-                  />
+                  <InputText id="email" type="text" placeholder="" />
                 </div>
                 <div className="p-field p-col-12 p-md-6">
                   <label htmlFor="country" style={{ marginLeft: "43%" }}>

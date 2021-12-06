@@ -17,12 +17,12 @@ ReactDOM.render(
   <React.StrictMode>
     {/* <LoginForm /> */}
     {/* <SignUp /> */}
-    <Homepage />
+    {/* <Homepage /> */}
     {/* <Feedback /> */}
     {/* <PaymentMethod /> */}
     {/* <CardHistory /> */}
     {/* <Aboutus /> */}
-    {/* <Setting /> */}
+    <Setting />
   </React.StrictMode>,
   document.getElementById("root")
 );

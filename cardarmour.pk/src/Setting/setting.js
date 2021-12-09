@@ -6,6 +6,7 @@ import { Calendar } from "primereact/calendar";
 import { InputText } from "primereact/inputtext";
 import React, { useState } from "react";
 import { Password } from "primereact/password";
+import { useNavigate } from "react-router-dom";
 
 const Setting = () => {
   const [selectedLanguage, setLanguage] = useState(null);
@@ -14,10 +15,13 @@ const Setting = () => {
   const [date1, setDate1] = useState(null);
   const [password, setPassword] = useState("");
   const [username, setUserName] = useState("");
+  const navigate = useNavigate();
+
   const languages = [
     { language: "English", code: "EN" },
     { language: "日本", code: "JP" },
     { language: "中國人", code: "CN" },
+    { language: "हिंदी", code: "HN" },
   ];
   const timeformat = [
     { language: "12 Hour", code: "12hr" },
@@ -27,6 +31,29 @@ const Setting = () => {
     { language: "Light", code: "light" },
     { language: "Dark", code: "dark" },
   ];
+
+  const getToken = () => {
+    return localStorage.getItem("USER_KEY");
+  };
+
+  let userName = getToken();
+
+  React.useEffect(() => {
+    userName = getToken();
+    if (userName === "undefined" || userName === null) {
+      navigate("/");
+    }
+  }, []);
+
+  const handleReturnHome = (e) => {
+    e.preventDefault();
+    navigate("/homepage");
+  };
+
+  const handleCancel = (e) => {
+    e.preventDefault();
+    navigate("/homepage");
+  };
 
   const onLanguageChange = (e) => {
     setLanguage(e.value);
@@ -58,6 +85,7 @@ const Setting = () => {
           <Col md={2}>
             {" "}
             <Button
+              onClick={handleReturnHome}
               label="Return Home"
               className="p-button-rounded p-button-warning"
               style={{ color: "black", marginLeft: "15%" }}
@@ -262,6 +290,7 @@ const Setting = () => {
                 }}
               />
               <Button
+                onClick={handleCancel}
                 label="Cancel"
                 className="p-button-raised p-button-danger"
                 style={{ marginLeft: "6%", marginBottom: "5%" }}

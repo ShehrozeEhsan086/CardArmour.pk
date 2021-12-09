@@ -9,26 +9,40 @@ import { Password } from "primereact/password";
 import { Checkbox } from "primereact/checkbox";
 import { userLogin } from "../api/authenticationService";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { useNavigate } from "react-router-dom";
+import {
+  authenticate,
+  authFailure,
+  authSuccess,
+} from "../redux/action-creators/index";
+import { connect } from "react-redux";
+import { Alert } from "react-bootstrap";
 
-const Login = () => {
+const Login = ({ loading, error, ...props }) => {
   const [password, setPassword] = useState("");
   const [username, setUserName] = useState("");
   const [checked, setChecked] = useState(false);
-  const [isPending, setIsPending] = useState(false);
+  const navigate = useNavigate();
+  const getToken = () => {
+    return localStorage.getItem("USER_KEY");
+  };
+
+  React.useEffect(() => {
+    localStorage.clear();
+    props.loginFailure();
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const data = { username, password };
-    console.log(data);
-    setIsPending(true);
+    props.authenticate();
     userLogin(data)
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data);
-          setIsPending(false);
+          props.setUser(response.data);
+          navigate("/homepage");
         } else {
-          console.log("Failed");
-          setIsPending(false);
+          props.loginFailure("Bad Credentials! Try again");
         }
       })
       .catch((err) => {
@@ -36,17 +50,20 @@ const Login = () => {
           switch (err.response.status) {
             case 401:
               console.log("401 status");
-              setIsPending(false);
+              props.loginFailure("Bad Credentials! Try again");
               break;
             default:
-              console.log("Failed");
-              setIsPending(false);
+              props.loginFailure("Bad Credentials! Try again");
           }
         } else {
-          console.log("Failed");
-          setIsPending(false);
+          props.loginFailure("Server Down");
         }
       });
+  };
+
+  const handleSignup = (e) => {
+    e.preventDefault();
+    navigate("/signup");
   };
 
   return (
@@ -61,7 +78,7 @@ const Login = () => {
         zIndex: "1000",
       }}
     >
-      {isPending && (
+      {loading && (
         <div>
           <Row>
             <br></br>
@@ -73,13 +90,13 @@ const Login = () => {
           <Row></Row>
         </div>
       )}
-      {isPending === false && (
+      {loading === false && (
         <div>
           <Row>
             <br></br>
           </Row>
           <Row>
-            <h1 className="name">CardArmour.pk</h1>
+            <h1 className="nameLogin">CardArmour.pk</h1>
           </Row>
           <Row
             className="p-shadow-24"
@@ -159,6 +176,11 @@ const Login = () => {
                 className="p-button-rounded p-button-outlined"
                 style={{ marginLeft: "42%", marginTop: "2%" }}
               />
+              {error && (
+                <Alert style={{ marginTop: "20px" }} variant="danger">
+                  {error}
+                </Alert>
+              )}
 
               <p className="secondarylogin">Or login with</p>
               <div
@@ -187,6 +209,7 @@ const Login = () => {
                   Dont have an account?
                 </p>
                 <Button
+                  onClick={handleSignup}
                   label="Sign up now"
                   className="p-button-text"
                   style={{ marginLeft: "19%", marginTop: "-5%" }}
@@ -200,4 +223,19 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = ({ auth }) => {
+  return {
+    loading: auth.loading,
+    error: auth.error,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authenticate: () => dispatch(authenticate()),
+    setUser: (data) => dispatch(authSuccess(data)),
+    loginFailure: (message) => dispatch(authFailure(message)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

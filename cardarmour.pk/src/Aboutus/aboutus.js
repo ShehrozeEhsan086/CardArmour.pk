@@ -2,8 +2,30 @@ import "./aboutus.css";
 import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import { Col, Row } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import React from "react";
 
-const aboutus = () => {
+const Aboutus = () => {
+
+  const navigate = useNavigate();
+  
+  const getToken=()=>{
+    return localStorage.getItem('USER_KEY');
+  }
+  let username = getToken();
+  
+  React.useEffect(()=>{
+    username = getToken();
+    if( username === "undefined" ||  username === null){
+      navigate('/');
+    }
+  },[])
+
+  const handleReturnHome = (e) => {
+    e.preventDefault();
+    navigate('/homepage');
+  }
+
   return (
     <div
       style={{
@@ -25,6 +47,7 @@ const aboutus = () => {
         <Row>
           <Col md={2}>
             <Button
+              onClick={handleReturnHome}
               label="Return Home"
               className="p-button-rounded p-button-outlined"
               style={{ color: "yellow", marginLeft: "15%" }}
@@ -92,4 +115,4 @@ const aboutus = () => {
   );
 };
 
-export default aboutus;
+export default Aboutus;

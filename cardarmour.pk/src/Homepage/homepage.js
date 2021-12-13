@@ -6,24 +6,128 @@ import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
 import { connect } from "react-redux";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { Dialog } from 'primereact/dialog';
+import { InputText } from "primereact/inputtext";
+import { getUser, getCustomerId, getBankAccount, deletePaymentMethod, generateVirtualCard, linkVirtualCard, getVirtualCard, deleteVirtualCard, getFiveTransactions } from "../api/authenticationService";
+
 
 const Homepage = ({ loading, error, ...props }) => {
   const navigate = useNavigate();
+  const [displayBasic, setDisplayBasic] = useState(false);
+  const [position, setPosition] = useState('center');
+  const [expiryDate, setExpiryDate] = useState("");
+  const [bankName, setBankName] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [expDate, setExpDate] = useState("");
+  const [accountid1, setAccountId] = useState(null);
+  const [virtualCardNumber, setVirtualCardNumber] = useState(null);
+  const [cardid, setCardid] = useState(null);
+  const [validity, setValidity] = useState("");
+  const [cvc, setCVC] = useState("");
+  const [transactions, setTransactions] = useState([]);
+  const [username, setUsername] = useState("");
+
+
+  let userid = null;
+  let accountid = null;
 
   const getToken = () => {
     return localStorage.getItem("USER_KEY");
   };
-  let username = getToken();
+  const getID = () => {
+    return localStorage.getItem("USER_ID");
+  };
+  //let username = null;
+  let id = getID();
+
 
   React.useEffect(() => {
     loading = true;
-    console.log(loading);
-    username = getToken();
-    console.log(username);
-    if (username === "undefined" || username === null) {
+    const username_= getToken();
+    getUser(id).then((response) => {
+      setUsername(response.data.username);
+    })
+    if (username_ === "undefined" || username_ === null) {
       navigate("/");
     }
+
+
+    getCustomerId(id).then((response) => {
+      userid = response.data
+      localStorage.setItem('C_ID',response.data);
+      getBankAccount(userid).then((response) => {
+        setBankName(response.data.bankname)
+        setCardNumber(response.data.cardnumber)
+        setExpDate(response.data.expdate)
+        setAccountId(response.data.accountid)
+        accountid = response.data.accountid;
+        if (accountid !== null) {
+          getVirtualCard(accountid).then((response) => {
+            console.log(response);
+            setVirtualCardNumber(response.data.cardNumber);
+            setValidity(response.data.expdate);
+            setCVC(response.data.cvc)
+            setCardid(response.data.cardid);
+            localStorage.setItem('VC_ID',response.data.cardid);
+            const virtualCardId = response.data.cardid
+            getFiveTransactions(virtualCardId).then((response) => {
+              const transactionList = response.data
+              setTransactions(transactionList);
+              console.log(transactions);
+            })
+          })
+        }
+      })
+    })
+
   }, []);
+
+  const handleDeletePayment = (e) => {
+    e.preventDefault();
+    deletePaymentMethod(accountid1).then((response) => {
+      window.location.reload(true);
+    })
+  }
+
+  const dialogFuncMap = {
+    'displayBasic': setDisplayBasic,
+  }
+
+  const onClick = (name, position) => {
+    console.log(accountid1);
+    dialogFuncMap[`${name}`](true);
+
+    if (position) {
+      setPosition(position);
+    }
+  }
+  const onHide = (name) => {
+    dialogFuncMap[`${name}`](false);
+  }
+
+  const handleSubmit = () => {
+
+    const cardholdername = username;
+    const expdate = expiryDate;
+    generateVirtualCard(cardholdername, expdate).then((response) => {
+      const virtualcardid = response.data;
+      linkVirtualCard(accountid1, virtualcardid).then((response) => {
+        console.log(response)
+        window.location.reload(true);
+      })
+
+    })
+    console.log("check");
+  }
+
+  const renderFooter = (name) => {
+    return (
+      <div>
+        <Button label="No" icon="pi pi-times" onClick={() => onHide(name)} className="p-button-text" />
+        <Button label="Yes" icon="pi pi-check" onClick={handleSubmit} autoFocus />
+      </div>
+    );
+  }
 
   const handleLogout = (e) => {
     e.preventDefault();
@@ -65,6 +169,15 @@ const Homepage = ({ loading, error, ...props }) => {
     e.preventDefault();
     navigate("/feedbackhistory");
   };
+
+  const handleVirtualCardDelete = (e) => {
+    e.preventDefault();
+    deleteVirtualCard(cardid).then((response) => {
+      window.location.reload(true);
+    })
+    
+    
+  }
 
   return (
     <div
@@ -176,21 +289,24 @@ const Homepage = ({ loading, error, ...props }) => {
                   backgroundImage: "url(paymentcard.png)",
                 }}
               >
-                <p className="text2">Payment Method</p>
-                <p className="text3">Bank Name:</p>
-                <p className="text3">Card Number:</p>
-                <p className="text3">Exp Date:</p>
-                <Button
+                <p className="text2">Payment Method </p>
+                <p className="text3">Bank Name:   {bankName}</p>
+                <p className="text3">Card Number:   {cardNumber}</p>
+                <p className="text3">Exp Date:   {expDate}</p>
+                {accountid1 === null || accountid1 === undefined && <Button
                   onClick={handlePayment}
                   label="Add Payment Method"
                   className="p-button-raised p-button-success"
-                  style={{ marginLeft: "8%", marginTop: "2%" }}
-                />
-                <Button
-                  label="Delete Payment Method"
-                  className="p-button-raised p-button-danger"
-                  style={{ marginLeft: "6%" }}
-                />
+                  style={{ marginLeft: "30%" }}
+                />}
+                {accountid1 &&
+                  <Button
+                    onClick={handleDeletePayment}
+                    label="Delete Payment Method"
+                    className="p-button-raised p-button-danger"
+                    style={{ marginLeft: "30%" }}
+                  />
+                }
               </Card>
             </Col>
             <Col ms={4}>
@@ -211,16 +327,21 @@ const Homepage = ({ loading, error, ...props }) => {
                   <th style={{ textAlign: "center" }}>Amount</th>
                 </tr>
                 <tbody>
-                  {/* {products.map((product) => ( */}
+                  {transactions.map((transaction) => (
                   <tr>
-                    {/* <td>{titleLov[product.title - 1].title}</td> */}
-                    {/* <td>{CheckkTitle(product.title)}</td>
-                    <td>{product.date}</td>
-                    <td>{product.comment}</td>
-                    <td>{product.status}</td>
-                    <td>{product.amount}</td> */}
+                    {/* <td>{titleLov[product.title - 1].title}</td>
+                    <td>{CheckkTitle(product.title)}</td> */}
+                    <td>{transaction.date}</td>
+                    <td>{transaction.comment}</td>
+                    { transaction.status === '1' &&
+                    <td><p>Successfull</p></td>
+                    }
+                    { transaction.status === '0' &&
+                    <td><p>Failed</p></td>
+                    }
+                    <td>{transaction.amount}</td>
                   </tr>
-                  {/* ))} */}
+                   ))} 
                 </tbody>
               </table>
               <p className="text1">
@@ -231,7 +352,7 @@ const Homepage = ({ loading, error, ...props }) => {
             <Col ms={4}>
               <p className="yourvc">Your Virtual Card</p>
 
-              <Card className="debitcard">
+              {(virtualCardNumber === null || virtualCardNumber === undefined) && <Card className="debitcard">
                 <Row>
                   <Col md={2}>
                     <img
@@ -278,18 +399,83 @@ const Homepage = ({ loading, error, ...props }) => {
                     />
                   </Col>
                 </Row>
-              </Card>
+              </Card>}
+              {virtualCardNumber &&
+                <Card className="debitcard">
+                  <Row>
+                    <Col md={2}>
+                      <img
+                        src="shield.png"
+                        style={{ height: "40px", marginLeft: "50%" }}
+                      />
+                    </Col>
+                    <Col md={10}>
+                      <div className="cardname">Card Armour</div>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <img
+                      src="card.png"
+                      style={{
+                        height: "40px",
+                        width: "70px",
+                        marginLeft: "4.7%",
+                        marginTop: "3%",
+                      }}
+                    />
+                  </Row>
+                  <Row>
+                    <br></br>
+                  </Row>
+                  <Row>
+                    <h2 className="cardnumber">{virtualCardNumber}</h2>
+                  </Row>
+                  <Row>
+                    <h5 className="cardexp">Expiry Date: {validity}</h5>
+                  </Row>
+                  <Row>
+                    <Col ms={4}>
+                      <h3 className="cardholdername">{username}</h3>
+                    </Col>
+                    <Col ms={2}>
+                      <h3 className="CVC">CVC: {cvc}</h3>
+                    </Col>
+                    <Col ms={6}>
+                      <img
+                        src="mastercard.png"
+                        style={{
+                          height: "50px",
+                          marginLeft: "60%",
+                          marginTop: "-5%",
+                        }}
+                      />
+                    </Col>
+                  </Row>
+                </Card>
+              }
               <br></br>
-              <Button
+              {/* <Button
                 label="Generate New Card"
                 className="p-button-raised p-button-info"
                 style={{ marginLeft: "23%" }}
-              />
-              <Button
+              /> */}
+              { (virtualCardNumber === null || virtualCardNumber === undefined) &&
+              <Button label="Generate New Card" icon="p-button-raised p-button-info" onClick={() => onClick('displayBasic')} style={{ marginLeft: "37.5%" }} />
+      }
+              <Dialog header="Enter Expiry Date" visible={displayBasic} style={{ width: '50vw' }} footer={renderFooter('displayBasic')} onHide={() => onHide('displayBasic')}>
+                <InputText
+                  id="username"
+                  value={expiryDate}
+                  onChange={(e) => setExpiryDate(e.target.value)}
+                  style={{ width: "222px" }}
+                />
+              </Dialog>
+              {virtualCardNumber && <Button
+                onClick={handleVirtualCardDelete}
                 label="Delete Current Card"
                 className="p-button-raised p-button-danger"
-                style={{ marginLeft: "3%" }}
-              />
+                style={{ marginLeft: "37.5%" }}
+              />}
               <br></br>
               <Button
                 onClick={handleCardHistory}

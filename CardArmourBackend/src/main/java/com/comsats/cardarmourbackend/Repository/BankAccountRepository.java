@@ -12,9 +12,9 @@ public interface BankAccountRepository extends JpaRepository<BankAccount,Integer
     BankAccount getBankAccountByUserId(int userid);
 
     @Query(value="INSERT INTO \"CARDARMOUR\".\"Bank Account\" (ACCOUNTID, CARDHOLDERNAME, BANKNAME, CARDNUMBER, CVC, EXPDATE) VALUES ( ?1, ?2, ?3, ?4, ?5 , ?6)",nativeQuery = true)
-    boolean addPaymentMethod(int accountid, String cardholdername, String bankname, String cardnumber,int cvc , Date expdate);
+    int addPaymentMethod(int accountid, String cardholdername, String bankname, String cardnumber,int cvc , Date expdate);
 
     @Query(value="DELETE FROM \"Bank Account\" WHERE accountid = ?1",nativeQuery = true)
-    boolean deletePaymentMethod(int accountid);
+    void deletePaymentMethod(int accountid);
 
 }

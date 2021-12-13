@@ -1,42 +1,67 @@
 package com.comsats.cardarmourbackend.Controller;
-
-import com.comsats.cardarmourbackend.Repository.CustomerRepository;
+import com.comsats.cardarmourbackend.Dto.CustomerView;
+import com.comsats.cardarmourbackend.Service.CustomerService;
 import com.comsats.cardarmourbackend.model.Customer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Random;
 
 @CrossOrigin("*")
 @RestController
 public class CustomerController {
 
     @Autowired
-    private CustomerRepository customerRepo;
+    private CustomerService customerService;
+
+    @PostMapping("/getCustomer")
+    public Customer getCustomer(@RequestParam int userid){
+        return customerService.getCustomer(userid);
+    }
+
+    @PostMapping("/getCustomerIdByUserId")
+    public int getCustomerId(@RequestParam int userid){
+        return customerService.getCustomerId(userid);
+    }
 
     @GetMapping("/getCustomerIds")
     public List<Integer> getIds(){
-        return customerRepo.getIds();
+        return customerService.getIds();
     }
 
-
-    @PostMapping("/addNewUserData")
-    public boolean addCustomerData(@RequestBody Customer customer){
-        Customer newCustomer = customer;
-        newCustomer.setCustomerid(generateId());
-        try{
-            customerRepo.addCustomerData(newCustomer.getCustomerid(),newCustomer.getName(),newCustomer.getGender(),newCustomer.getCnic(),newCustomer.getDob(),newCustomer.getAge(),newCustomer.getEmail(),newCustomer.getCityid(),newCustomer.getUserid());
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-        return true;
-
+    @PostMapping("/addNewCustomerData")
+    public int addCustomerData(@RequestBody Customer customer){
+        return customerService.addCustomerData(customer);
     }
 
-    private int generateId(){
-        Random rand = new Random();
-        return rand.nextInt(10000000);
+    @PostMapping("/updateCustomer")
+    public void updateCustomer(@RequestBody Customer customer){
+        customerService.updateCustomer(customer);
+    }
+
+    @GetMapping("/getAllCustomers")
+    public List<Customer> getAll(){
+        return customerService.getAll();
+    }
+
+    @GetMapping("/getPakistaniCustomers")
+    public List<CustomerView> getPakis(){
+        return customerService.getPakis();
+    }
+
+    @GetMapping("/getIndianCustomers")
+    public List<CustomerView> getIndians(){
+        return customerService.getIndians();
+    }
+
+    @GetMapping("/getBangladeshiCustomers")
+    public List<CustomerView> getBangladeshis(){
+        return customerService.getBangladeshis();
+    }
+
+    @GetMapping("/getChineseCustomers")
+    public List<CustomerView> getChinese(){
+        return customerService.getChinese();
     }
 
 }

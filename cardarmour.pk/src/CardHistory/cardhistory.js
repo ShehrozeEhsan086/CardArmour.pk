@@ -2,21 +2,43 @@ import "./cardhistory.css";
 import { Col, Row } from "react-bootstrap";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
-import React from "react";
+import  React ,{useState} from "react";
+import { getTransactions } from "../api/authenticationService"
+import { totalSpending, totlaTransactions} from "../api/authenticationService"
 
 const Cardhistory = () => {
   const navigate = useNavigate();
+  const [transactions, setTransactions] = useState([]);
+  const [totalSpendings, setTotalSpending] = useState("");
+  const [totalTransactions_, setTotalTransactions] = useState("");
 
   const getToken = () => {
     return localStorage.getItem("USER_KEY");
   };
+  const getVirtualCardID = () => {
+    return localStorage.getItem("VC_ID");
+  };
   let username = getToken();
 
   React.useEffect(() => {
+    const cardid = getVirtualCardID();
+    console.log(cardid);
     username = getToken();
     if (username === "undefined" || username === null) {
       navigate("/");
     }
+    getTransactions(cardid).then((response) => {
+      const transactionList = response.data
+      setTransactions(transactionList);
+      console.log(transactions);
+      totalSpending(cardid).then((response) => {
+        setTotalSpending(response.data)
+      })
+      totlaTransactions(cardid).then((response) => {
+        setTotalTransactions(response.data)
+      })
+
+    })
   }, []);
 
   const handleReturnHome = (e) => {
@@ -70,9 +92,23 @@ const Cardhistory = () => {
 
       <div>
         <br></br>
-        <h5 className="vcth">Virtual Card Transaction History</h5>
+        <h5 className="ch">Virtual Card Transaction History</h5>
       </div>
       <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: "2%" }}>
+      <Row>
+          <Col md={6}>
+            <h5
+              style={{ marginBottom: "2%", color: "white", marginLeft: "45%" }}
+            >
+              Total Transactions done on this card: {totalTransactions_}
+            </h5>
+          </Col>
+          <Col md={6}>
+            <h5 style={{ color: "white", marginLeft: "15%" }}>
+              Total Spending: Rs.{totalSpendings}
+            </h5>
+          </Col>
+        </Row>
         <table className="customers">
           <tr
             style={{
@@ -85,16 +121,21 @@ const Cardhistory = () => {
             <th style={{ textAlign: "center" }}>Amount</th>
           </tr>
           <tbody>
-            {/* {products.map((product) => ( */}
-            <tr>
-              {/* <td>{titleLov[product.title - 1].title}</td> */}
-              {/* <td>{CheckkTitle(product.title)}</td>
-                    <td>{product.date}</td>
-                    <td>{product.comment}</td>
-                    <td>{product.status}</td>
-                    <td>{product.amount}</td> */}
-            </tr>
-            {/* ))} */}
+          {transactions.map((transaction) => (
+                  <tr>
+                    {/* <td>{titleLov[product.title - 1].title}</td>
+                    <td>{CheckkTitle(product.title)}</td> */}
+                    <td>{transaction.date}</td>
+                    <td>{transaction.comment}</td>
+                    { transaction.status === '1' &&
+                    <td><p>Successfull</p></td>
+                    }
+                    { transaction.status === '0' &&
+                    <td><p>Failed</p></td>
+                    }
+                    <td>{transaction.amount}</td>
+                  </tr>
+              ))} 
           </tbody>
         </table>
       </div>

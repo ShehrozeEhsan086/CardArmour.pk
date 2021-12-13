@@ -1,11 +1,8 @@
 package com.comsats.cardarmourbackend.Controller;
-
-import com.comsats.cardarmourbackend.Repository.CountryRepository;
+import com.comsats.cardarmourbackend.Service.CountryService;
 import com.comsats.cardarmourbackend.model.Country;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -14,10 +11,15 @@ import java.util.List;
 public class CountryController {
 
     @Autowired
-    private CountryRepository countryRepo;
+    private CountryService countryService;
+
+    @PostMapping("/getCountryByCustomer")
+    public Country getCountry(@RequestParam int customerid){
+        return countryService.getCountry(customerid);
+    }
 
     @GetMapping("/getCountries")
     public List<Country> getCountries(){
-        return countryRepo.getCountries();
+        return countryService.getCountries();
     }
 }

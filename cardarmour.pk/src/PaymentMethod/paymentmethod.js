@@ -10,22 +10,61 @@ import { Calendar } from "primereact/calendar";
 import "./paymentmethod.css";
 import { Container, Row, Col, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import  {addPayment, linkCustomer, getCustomerId}  from "../api/authenticationService";
 
 const PaymentMethod = () => {
-  const [date1, setDate1] = useState(null);
   const navigate = useNavigate();
+  const [cardholdername, setCardholdername] = useState("");
+  const [bankname, setBankname] = useState("");
+  const [cardnumber, setCardnumber] = useState("");
+  const [cvc, setCvc] = useState("");
+  const [expdate, setExpdate] = useState("");
+  const [accountid1, setAccountid] = useState("");
+  const [customerid1, setCustomerid] = useState("");
+  const [userid1, setUserid] = useState("");
+
+  
 
   const getToken = () => {
     return localStorage.getItem("USER_KEY");
   };
+  const getID = () => {
+    return localStorage.getItem("USER_ID");
+  };
   let username = getToken();
+  let userid = getID();
 
   React.useEffect(() => {
+
     username = getToken();
+    
     if (username === "undefined" || username === null) {
       navigate("/");
     }
+
+
   }, []);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    userid = getID();
+    let customerid = null;
+    const data = {cardholdername, bankname, cardnumber, cvc, expdate}
+    addPayment(data).then((response) => {
+      let accountid = response.data
+      getCustomerId(userid).then((response) => {
+        customerid = response.data
+        console.log("asa",customerid);
+        console.log("account",accountid);
+        linkCustomer(accountid,customerid).then((response) => {
+          console.log("done", response)
+          navigate("/homepage");
+        })
+      })
+    })
+
+    console.log(data)
+  }
 
   const handleCancel = (e) => {
     e.preventDefault();
@@ -74,7 +113,9 @@ const PaymentMethod = () => {
                   Card Holder Name
                 </label>
                 <InputText
-                  id="firstname"
+                  id = "cardholdername"
+                  value = {cardholdername}
+                  onChange={(e) => setCardholdername(e.target.value)}
                   type="text"
                   placeholder="e.g. John Wich"
                 />
@@ -85,7 +126,9 @@ const PaymentMethod = () => {
                   Bank Name
                 </label>
                 <InputText
-                  id="firstname"
+                  id = "bankname"
+                  value = {bankname}
+                  onChange={(e) => setBankname(e.target.value)}
                   type="text"
                   placeholder="e.g. Tupac Bank"
                 />
@@ -95,7 +138,9 @@ const PaymentMethod = () => {
                   Card Number
                 </label>
                 <InputText
-                  id="cnic"
+                  id = "cardnumber"
+                  value = {cardnumber}
+                  onChange={(e) => setCardnumber(e.target.value)}
                   type="text"
                   placeholder="XXXX-XXXX-XXXX-XXXX"
                 />
@@ -107,19 +152,28 @@ const PaymentMethod = () => {
                 <label htmlFor="cvc" style={{ marginLeft: "40%" }}>
                   CVC
                 </label>
-                <InputText id="cnic" type="text" placeholder="XXX" />
+                <InputText 
+                  id = "cvc"
+                  value = {cvc}
+                  onChange={(e) => setCvc(e.target.value)}
+                  type="text" placeholder="XXX" />
               </div>
 
               <div className="p-field p-col-12 p-md-6">
                 <label htmlFor="cvc" style={{ marginLeft: "36%" }}>
                   Exp Date
                 </label>
-                <InputText id="cnic" type="text" placeholder="XXX" />
+                <InputText 
+                  id = "expdate"
+                  value = {expdate}
+                  onChange={(e) => setExpdate(e.target.value)}
+                  type="text" placeholder="XXX" />
               </div>
             </div>
             <Button
               label="Confirm"
               className="p-button-rounded p-button-outlined"
+              onClick={handleSubmit}
               style={{
                 marginLeft: "28%",
                 marginTop: "2%",

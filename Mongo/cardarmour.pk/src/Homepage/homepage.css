@@ -116,3 +116,7 @@
   font-family: "Poppins", sans-serif;
   color: white;
 }
+
+.customers tr:nth-child(even) {
+  background-color: transparent;
+}

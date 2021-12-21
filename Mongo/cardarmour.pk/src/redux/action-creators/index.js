@@ -11,6 +11,7 @@ export const authenticate=()=>{
 export const authSuccess = (content)=>{
     localStorage.setItem('USER_KEY',content.username);
     localStorage.setItem('USERNAME',content.username);
+    localStorage.setItem('PASSWORD',content.password);
     localStorage.setItem('USER_ID',content.userid);
     localStorage.setItem('CUSTOMER_ID',content.customerid);
     localStorage.setItem('BANKACCOUNTNAME',content.bankaccount.bankname);

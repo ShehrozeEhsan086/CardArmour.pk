@@ -10,13 +10,15 @@ import { ProgressSpinner } from "primereact/progressspinner";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import {
+  getByCountry,
+  getFeedbacks,
+  addToFlaggedUser,
   getAllCustomers,
   getCustomerId,
   getUser,
   getCityByCustomer,
   getAllCities,
   countriesAPI,
-  addToFlaggedUser,
   getAdminID,
   getAllFeedback,
   getReply,
@@ -47,11 +49,18 @@ const Homepage = ({ loading, error, ...props }) => {
   const [countriesLov, setCountriesLov] = useState([]);
   const [customerid, setCustomerid] = useState([]);
   const [adminid, setAdminid] = useState([]);
-  const [countryBy, setCountryBy] = useState([]);
+  //const [countryBy, setCountryBy] = useState([]);
   const [country, setCountry] = useState(null);
   const [feedbacks, setFeedbacks] = useState([]);
+  const [flagUserName, setFlagUserName] = useState("");
 
   const genders = [{ name: "Male" }, { name: "Female" }];
+  const countryBy = [
+    { name: "Pakistan" },
+    { name: "India" },
+    { name: "Bengladesh" },
+    { name: "China" },
+  ];
 
   const dialogFuncMap = {
     displayBasic: setDisplayBasic,
@@ -107,6 +116,8 @@ const Homepage = ({ loading, error, ...props }) => {
       const customerList = response.data;
       let data = customerList;
       setCustomers(data);
+      console.log(data);
+      console.log(typeof data);
     });
     // getAllCities().then((response) => {
     //   setCitiesLov(response.data);
@@ -114,10 +125,10 @@ const Homepage = ({ loading, error, ...props }) => {
     // countriesAPI().then((response) => {
     //   setCountriesLov(response.data);
     // });
-    // getAllFeedback().then((response) => {
-    //   console.log("feedbacks", response);
-    //   setFeedbacks(response.data);
-    // });
+    getFeedbacks().then((response) => {
+      console.log("feedbacks", response);
+      setFeedbacks(response.data);
+    });
 
     // countriesAPI().then((response) => {
     //   console.log(response);
@@ -138,14 +149,13 @@ const Homepage = ({ loading, error, ...props }) => {
   };
 
   const onCountryChange = (e) => {
-    setCountry(e.value);
+    setCountry(e.value.name);
   };
 
   const handleFlag = (e) => {
     e.preventDefault();
-    const customerCustomerid = customerid;
-    const adminAdminid = adminid;
-    const data = { customerCustomerid, reason, adminAdminid };
+    const username = flagUserName;
+    const data = { username, reason };
     console.log(data);
     addToFlaggedUser(data).then((response) => {
       window.location.reload(true);
@@ -163,32 +173,48 @@ const Homepage = ({ loading, error, ...props }) => {
     return dob;
   };
 
+  const checkFeedback = (v) => {
+    console.log("details", v);
+    if (v.details === null) {
+    } else return v.details;
+    // if(v.feedback !== null){
+    //   console.log(true)
+    //   v.feedback.forEach(element => {
+    //     detail = element.detail
+    //   });
+    //   return v.details;
+    // }
+  };
+
   const handleCountryChange = (e) => {
     e.preventDefault();
-    console.log(country);
-    if (country.name === "Pakistan") {
-      getPakistaniCustomers().then((response) => {
-        setCustomers(response.data);
-        console.log(response);
-      });
-    } else if (country.name === "India") {
-      getIndianCustomers().then((response) => {
-        setCustomers(response.data);
-        console.log(response);
-      });
-    } else if (country.name === "Bangladesh") {
-      getBangladeshiCustomers().then((response) => {
-        setCustomers(response.data);
-        console.log(response);
-      });
-    } else if (country.name === "China") {
-      getChineseCustomers().then((response) => {
-        setCustomers(response.data);
-        console.log(response);
-      });
-    } else {
-      alert("Select valid country");
-    }
+    getByCountry(country).then((response) => {
+      setCustomers(response.data);
+      console.log(response);
+    });
+    // if (country.name === "Pakistan") {
+    //   getPakistaniCustomers().then((response) => {
+    //     setCustomers(response.data);
+    //     console.log(response);
+    //   });
+    // } else if (country.name === "India") {
+    //   getIndianCustomers().then((response) => {
+    //     setCustomers(response.data);
+    //     console.log(response);
+    //   });
+    // } else if (country.name === "Bangladesh") {
+    //   getBangladeshiCustomers().then((response) => {
+    //     setCustomers(response.data);
+    //     console.log(response);
+    //   });
+    // } else if (country.name === "China") {
+    //   getChineseCustomers().then((response) => {
+    //     setCustomers(response.data);
+    //     console.log(response);
+    //   });
+    // } else {
+    //   alert("Select valid country");
+    // }
   };
 
   const renderFooter = (name) => {
@@ -267,6 +293,30 @@ const Homepage = ({ loading, error, ...props }) => {
           </Row>
 
           <Row>
+            <div style={{ marginLeft: "5%" }}>
+              <label htmlFor="gender">
+                <h5 style={{ color: "white" }}>Filter By Country : </h5>
+              </label>
+              <br></br>
+              <Dropdown
+                inputId="gender"
+                value={country}
+                options={countryBy}
+                onChange={onCountryChange}
+                // placeholder={country}
+                placeholder={country}
+                optionLabel="name"
+                style={{ marginLeft: "1.4%" }}
+              />
+              <Button
+                onClick={handleCountryChange}
+                label="Go"
+                className="p-button-raised p-button-success"
+                style={{
+                  marginLeft: "1%",
+                }}
+              />
+            </div>
             <Col md={8}>
               <div style={{ marginLeft: "1%" }}>
                 <h4
@@ -340,8 +390,7 @@ const Homepage = ({ loading, error, ...props }) => {
                           {" "}
                           <Button
                             onClick={() => {
-                              setCustomerid(customer.customerid);
-                              console.log(customer.customerid);
+                              setFlagUserName(customer.username);
                               onClick("displayBasic");
                             }}
                             label="Flag Customer"
@@ -378,18 +427,19 @@ const Homepage = ({ loading, error, ...props }) => {
                   <tbody>
                     {feedbacks.map((feedback) => (
                       <tr>
-                        <td>{feedback.detail}</td>
+                        <td>{checkFeedback(feedback)}</td>
+                        {/* <td>{feedback.feedback.details}</td> */}
                         <td>
                           {
                             <Button
                               onClick={() => {
                                 localStorage.setItem(
-                                  "FEEDBACK_ID",
-                                  feedback.feedbackid
+                                  "USERNAME",
+                                  feedback.username
                                 );
                                 localStorage.setItem(
-                                  "FEEDBACK_CUSTOMER_ID",
-                                  feedback.customerid
+                                  "DETAILS",
+                                  feedback.details
                                 );
                                 navigate("/feedback");
                               }}

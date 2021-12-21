@@ -1,6 +1,28 @@
 import axios from "axios";
 
+export const getCountTransactions = (username) => {
+  return axios({
+    method: "POST",
+    url: "http://localhost:8081/getCountTransactions",
+    params: {username},
+   });
+ };
 
+export const getSpending = (username) => {
+  return axios({
+    method: "POST",
+    url: "http://localhost:8081/getSpending",
+    params: {username},
+   });
+ };
+
+export const deleteCustomer = (username) => {
+  return axios({
+    method: "POST",
+    url: "http://localhost:8081/deleteCustomer",
+    params: {username},
+   });
+ };
 
 export const updateUser = (username, data) => {
   return axios({

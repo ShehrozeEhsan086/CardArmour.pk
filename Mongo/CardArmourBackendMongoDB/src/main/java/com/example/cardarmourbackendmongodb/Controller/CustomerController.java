@@ -2,6 +2,7 @@ package com.example.cardarmourbackendmongodb.Controller;
 
 import com.example.cardarmourbackendmongodb.Dto.CustomerDto;
 import com.example.cardarmourbackendmongodb.Dto.FeedbackDto;
+import com.example.cardarmourbackendmongodb.Dto.SingleFeedbackDto;
 import com.example.cardarmourbackendmongodb.Model.*;
 import com.example.cardarmourbackendmongodb.Service.CustomerService;
 import lombok.AllArgsConstructor;
@@ -105,5 +106,31 @@ public class CustomerController {
     public List<FeedbackDto> getFeedbacks(){
         return customerService.getAllFeedbacks();
     }
+
+    @PostMapping("/deleteCustomer")
+    public void deleteCustomer(@RequestParam String username){
+        customerService.deleteCustomer(username);
+    }
+
+    @PostMapping("/addResponse")
+    public void addResponse(@RequestBody SingleFeedbackDto singleFeedbackDto){
+        customerService.addResponseToFeedback(singleFeedbackDto);
+    }
+
+    @PostMapping("/getSpending")
+    public int getSpending(@RequestParam String username){
+        return customerService.totalSpending(username);
+    }
+
+    @PostMapping("/getCountTransactions")
+    public int getCountTransactions(@RequestParam String username){
+        return customerService.countTransactions(username);
+    }
+
+    @PostMapping("/getByCountry")
+    public List<Customer> getByCountry(@RequestParam String countryName){
+        return customerService.getByCountry(countryName);
+    }
+
 
 }

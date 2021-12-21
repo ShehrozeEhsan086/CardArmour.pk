@@ -1,12 +1,10 @@
 package com.example.cardarmourbackendmongodb.Service;
 
-import com.example.cardarmourbackendmongodb.Model.Customer;
 import com.example.cardarmourbackendmongodb.Model.FlaggedAccount;
 import com.example.cardarmourbackendmongodb.Repository.FlaggedAccountRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @AllArgsConstructor
@@ -37,6 +35,15 @@ public class FlaggedUserService {
             flaggedAccountRepository.deleteByUsername(username);
         } catch(Exception e){
             e.printStackTrace();
+        }
+    }
+
+    public FlaggedAccount getFlaggedOnUsername(String username){
+        try{
+            return flaggedAccountRepository.findFlaggedAccountByUsername(username);
+        } catch(Exception e){
+            e.printStackTrace();
+            return null;
         }
     }
 

@@ -3,7 +3,7 @@ import { Col, Row } from "react-bootstrap";
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import React, { useState } from "react";
-import { getAllReply, getFeedback } from "../api/authenticationService"
+import {  getAllReply, getFeedback } from "../api/authenticationService"
 
 const Feedbackhistory = () => {
   const navigate = useNavigate();
@@ -36,36 +36,14 @@ const Feedbackhistory = () => {
   }, []);
 
   const checkReply = (v) => {
-    // for (let index = 0; index < 1; index++) {
-    //   for (let j = 0; j < replies.length; j++) {
-    //     if (replies[j].feedbackid === v) {
-    //       console.log("inside")
-    //       v = replies[j].comment
-    //       break;
-    //     }
-    //     else{
-    //       v = "Not found"
-    //     }
-
-    // }
-    // break;
-    // }
+    console.log(v);
     let a;
-    replies.forEach((element) => {
-
-      if (element.feedbackid === v) {
-        console.log("inside")
-        a = element.comment
-      }
-      // else{
-      //   v = "Not found"
-      // }
-    });
-    console.log(typeof a)
-    if (a === undefined) {
-      a = "Waiting for Admin Response..."
+    if (v.response === '') {
+      return "Waiting for Admin Response..."
     }
-    return a;
+    else{
+      return v.response
+    }
   }
   const handleReturnHome = (e) => {
     e.preventDefault();
@@ -139,10 +117,8 @@ const Feedbackhistory = () => {
           <tbody>
             {feedbacks.map((feedback) => (
               <tr>
-
-                
                 {feedback.details && <td>{feedback.details}</td>}
-                {feedback.details && <td>{checkReply(feedback.feedbackid)}</td>}
+                {feedback.details && <td>{checkReply(feedback)}</td>}
               </tr>
             ))}
           </tbody>

@@ -7,7 +7,7 @@ import { InputText } from "primereact/inputtext";
 import React, { useState } from "react";
 import { Password } from "primereact/password";
 import { useNavigate } from "react-router-dom";
-import { getCustomerOnUsername,addSetting , setSetting, updateSetting, getSetting, getUser, getCustomer, updateCustomer, getPhonenumber, countriesAPI, citiesAPI, getCityByCustomer, getCountryByCustomer, updateUser, deleteUser } from "../api/authenticationService"
+import { deleteCustomer, getCustomerOnUsername,addSetting , setSetting, updateSetting, getSetting, getUser, getCustomer, updateCustomer, getPhonenumber, countriesAPI, citiesAPI, getCityByCustomer, getCountryByCustomer, updateUser, deleteUser } from "../api/authenticationService"
 
 const Setting = () => {
   const [selectedLanguage, setLanguage] = useState(null);
@@ -90,7 +90,7 @@ const Setting = () => {
       setLanguage_p(response.data.language)
       setTimeFormat(response.data.timeformat)
       setTimeFormat_p(response.data.timeformat)
-      setMode(response.data.lightDarkMode)
+      setMode(response.data.mode)
       setMode_p(response.data.mode)
       lang = response.data.language
       time = response.data.timeformat
@@ -116,7 +116,8 @@ const Setting = () => {
       setCnic(response.data.cnic)
       setDob(response.data.dateofbirth)
       setEmail(response.data.email)
-      setCity(response.data.city)
+      setCity(response.data.location.city)
+      setCountry(response.data.location.country)
       setAge(response.data.age)
       setPhonenumber(response.data.phonenumber);
       setCity_p(response.data.location.city);
@@ -181,24 +182,71 @@ const Setting = () => {
       //   cityid = city_i.cityid;
       // }
       
-      gender = gender_i.name
-      let city = country_i.name
-      let country = city_i.name
+      let city;
+      let country;
+      let phonenumber;
+      if (selectedLanguage.language === undefined || selectedLanguage.language === null) {
+        console.log("selectedlanguage")
+        language = selectedLanguage;
+      }
+      else {
+        language = selectedLanguage.language;
+      }
+      if (selectedTimeFormat.language === undefined || selectedTimeFormat.language === null) {
+        timeformat = selectedTimeFormat;
+      }
+      else {
+        timeformat = selectedTimeFormat.language;
+      }
+
+      if (selectedMode.language === undefined || selectedMode.language === null) {
+        mode = selectedMode;
+      }
+      else {
+        mode = selectedMode.language;
+      }
+
+
+      if (city_i.name === undefined || city_i.name === null) {
+        city = city_i;
+      }
+      else {
+        city = city_i.name;
+      }
+
+      if (country_i.name === undefined || country_i.name === null) {
+        country = country_i;
+      }
+      else {
+        country = country_i.name;
+      }
+
+      if (gender_i.name === undefined || gender_i.name === null) {
+        gender = gender_i;
+      }
+      else {
+        gender = gender_i.name;
+      }
+
+      if (typeof phonenumber_ === 'string') {
+        phonenumber = [phonenumber_];
+      }
+      else {
+        phonenumber = phonenumber_ ;
+      }
+  
+      //gender = gender_i.name
+      //let city = country_i.name
+      //let country = city_i.name
       let dateofbirth = dob
       const location = {city, country}
       //const userdata = { username, password, userid }
-      language = selectedLanguage.language;
-      timeformat = selectedTimeFormat.language;
-      mode = selectedMode.language;
       const settingData = { language, timeformat, mode }
       let oldusername = getToken();
-      console.log("setting", settingData)
-      console.log( oldusername)
-      let phonenumber = [phonenumber_]
       const data = {location, name, gender, cnic,phonenumber, dateofbirth, email, username, password}
-      console.log(data)
       updateUser(oldusername, data).then((response) => {
         addSetting(settingData, oldusername).then((response) => {
+          navigate('/')
         })
       })
     // updateCustomer(data).then((response) => {
@@ -214,7 +262,11 @@ const Setting = () => {
       // else {
       //   gender = gender_i.name;
       // }
+      let city;
+      let country;
+      let phonenumber;
       if (selectedLanguage.language === undefined || selectedLanguage.language === null) {
+        console.log("selectedlanguage")
         language = selectedLanguage;
       }
       else {
@@ -226,38 +278,55 @@ const Setting = () => {
       else {
         timeformat = selectedTimeFormat.language;
       }
+
       if (selectedMode.language === undefined || selectedMode.language === null) {
         mode = selectedMode;
       }
       else {
         mode = selectedMode.language;
       }
-      // if (cityid.name === undefined || cityid.name === null) {
-      //   cityid = city_i;
-      // }
-      // else {
-      //   cityid = city_i.cityid;
-      // }
+
+
+      if (city_i.name === undefined || city_i.name === null) {
+        city = city_i;
+      }
+      else {
+        city = city_i.name;
+      }
+
+      if (country_i.name === undefined || country_i.name === null) {
+        country = country_i;
+      }
+      else {
+        country = country_i.name;
+      }
+
+      if (gender_i.name === undefined || gender_i.name === null) {
+        gender = gender_i;
+      }
+      else {
+        gender = gender_i.name;
+      }
+
+      if (typeof phonenumber_ === 'string') {
+        phonenumber = [phonenumber_];
+      }
+      else {
+        phonenumber = phonenumber_ ;
+      }
   
-      gender = gender_i.name
-      let city = country_i.name
-      let country = city_i.name
+      //gender = gender_i.name
+      //let city = country_i.name
+      //let country = city_i.name
       let dateofbirth = dob
       const location = {city, country}
       //const userdata = { username, password, userid }
-      language = selectedLanguage.language;
-      timeformat = selectedTimeFormat.language;
-      mode = selectedMode.language;
       const settingData = { language, timeformat, mode }
       let oldusername = getToken();
-      console.log("setting", settingData)
-      console.log( oldusername)
-      console.log("ph",phonenumber_)
-      let phonenumber = [phonenumber_]
       const data = {location, name, gender, cnic,phonenumber, dateofbirth, email, username, password}
-      console.log(data)
       updateUser(oldusername, data).then((response) => {
         addSetting(settingData, oldusername).then((response) => {
+          navigate('/')
         })
       })
       
@@ -283,8 +352,7 @@ const Setting = () => {
 
   const handleDelete = (e) => {
     e.preventDefault();
-    userid = getUserId();
-    deleteUser(userid).then((response) => {
+    deleteCustomer(username).then((response) => {
       navigate('/')
     })
   }
@@ -426,6 +494,7 @@ const Setting = () => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     type="text" placeholder="" />
+          
                 </div>
                 <div
                   className="p-field p-col-12 p-md-3"
@@ -476,10 +545,10 @@ const Setting = () => {
                   </label>
                   <InputText
                     id="phone Number"
-                    value={phone}
-                    onChange={(e) => setPhone(e.value)}
-                    placeholder={phone} />
-                    <h1>{phone}</h1>
+                    value={phonenumber_}
+                    onChange={(e) => setPhonenumber(e.target.value)}
+                    placeholder={phonenumber_} />
+    
                 </div>
                 <div className="p-field p-col-6">
                   <label htmlFor="email" style={{ marginLeft: "44%" }}>
@@ -488,8 +557,9 @@ const Setting = () => {
                   <InputText
                     id="Email"
                     value={email}
-                    onChange={(e) => setEmail(e.value)}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
+
                 </div>
                 <div className="p-field p-col-12 p-md-6">
                   <label htmlFor="country" style={{ marginLeft: "43%" }}>

@@ -2,9 +2,9 @@ package com.example.cardarmourbackendmongodb.Service;
 
 import com.example.cardarmourbackendmongodb.Dto.CustomerDto;
 import com.example.cardarmourbackendmongodb.Dto.FeedbackDto;
+import com.example.cardarmourbackendmongodb.Dto.SingleFeedbackDto;
 import com.example.cardarmourbackendmongodb.Model.*;
 import com.example.cardarmourbackendmongodb.Repository.CustomerRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -85,6 +85,15 @@ public class CustomerService {
             feedbacks = customer.getFeedbacks();
             if(feedbacks.isEmpty()){
                 customer.setFeedbacks(recieved);
+            } else if(feedbacks.size()==1){
+                Feedback temp = feedbacks.get(0);
+                if(temp.getDetails() == null){
+                    feedbacks.remove(0);
+                    feedbacks.add(feedback);
+                } else{
+                    feedbacks.add(feedback);
+                    customer.setFeedbacks(feedbacks);
+                }
             } else {
                 feedbacks.add(feedback);
                 customer.setFeedbacks(feedbacks);
@@ -219,14 +228,91 @@ public class CustomerService {
         try{
             List<FeedbackDto> feedbackDtos = new ArrayList<>();
             List<Customer> customers = customerRepository.findAll();
-            customers.size();
             for(int i = 0;i<customers.size();i++){
-                FeedbackDto tempFeedback = new FeedbackDto();
-                tempFeedback.setUsername(customers.get(i).getUsername());
-                tempFeedback.setFeedback(customers.get(i).getFeedbacks());
-                feedbackDtos.add(tempFeedback);
+
+                List<Feedback> tempFeedback1 = customers.get(i).getFeedbacks();
+                if( tempFeedback1.size() <= 1 && tempFeedback1.get(0).getDetails() == null ){
+                    continue;
+                } else{
+                    List<Feedback> temp = customers.get(i).getFeedbacks();
+                    for(int j=0;j<temp.size();j++){
+                        FeedbackDto tempFeedback = new FeedbackDto();
+                        tempFeedback.setUsername(customers.get(i).getUsername());
+                        tempFeedback.setDetails(temp.get(j).getDetails());
+                        tempFeedback.setResponse(temp.get(j).getResponse());
+                        feedbackDtos.add(tempFeedback);
+                    }
+                }
             }
             return feedbackDtos;
+        } catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void deleteCustomer(String username){
+        try{
+            customerRepository.deleteCustomerByUsername(username);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void addResponseToFeedback(SingleFeedbackDto feedback){
+        try{
+            Customer customer = customerRepository.findByUsername(feedback.getUsername());
+            List<Feedback> oldFeedbacks = customer.getFeedbacks();
+            List<Feedback> latestFeedbacks = new ArrayList<>();
+            for(int i=0;i<oldFeedbacks.size();i++){
+                Feedback feedbackTemp = oldFeedbacks.get(i);
+                Feedback feedbackTemp2 = feedback.getFeedback();
+                if(feedbackTemp.getDetails().equals(feedbackTemp2.getDetails())){
+                    latestFeedbacks.add(feedbackTemp2);
+                } else {
+                    latestFeedbacks.add(oldFeedbacks.get(i));
+                }
+            }
+            customer.setFeedbacks(latestFeedbacks);
+            customerRepository.save(customer);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public int totalSpending(String username){
+        try{
+            Customer customer = customerRepository.findByUsername(username);
+            List<Transactions> transactions = customer.getTransactions();
+            int spending=0;
+            for(int i=0;i<transactions.size();i++){
+                spending = spending + transactions.get(i).getAmount();
+            }
+            return spending;
+        } catch(Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public int countTransactions(String username){
+        try{
+            Customer customer = customerRepository.findByUsername(username);
+            List<Transactions> transactions = customer.getTransactions();
+            if(transactions.size()==1 && transactions.get(0).getAmount()==0){
+                return 0;
+            } else{
+                return transactions.size();
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    public List<Customer> getByCountry(String countryname){
+        try{
+            return customerRepository.getCustomerByLocationCountry(countryname);
         } catch(Exception e){
             e.printStackTrace();
             return null;
@@ -237,10 +323,7 @@ public class CustomerService {
 
 
 
-
-
-
-//----------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------------------------------//
 
     private String generatecvc(){
         Random rand = new Random();

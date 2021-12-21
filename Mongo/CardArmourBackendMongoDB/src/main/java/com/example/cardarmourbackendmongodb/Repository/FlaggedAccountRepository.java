@@ -7,4 +7,6 @@ public interface FlaggedAccountRepository extends MongoRepository<FlaggedAccount
 
         void deleteByUsername(String username);
 
+        FlaggedAccount findFlaggedAccountByUsername(String username);
+
 }

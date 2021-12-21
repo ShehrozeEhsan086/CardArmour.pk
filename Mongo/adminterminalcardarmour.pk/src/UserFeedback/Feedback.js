@@ -5,11 +5,11 @@ import { InputTextarea } from "primereact/inputtextarea";
 import React, { useState } from "react";
 import "./Feedback.css";
 import { useNavigate } from "react-router-dom";
-import {getFeedbackByFeedbackId, addReply,getAdminID } from "../api/authenticationService";
+import {addResponse, getFeedback, getFeedbackByFeedbackId, addReply,getAdminID } from "../api/authenticationService";
 
 const Feedback = () => {
   const [detail, setDetail] = useState("");
-  const [response, setResponse] = useState("");
+  const [response_, setResponse] = useState("");
   const navigate = useNavigate();
 
   const getToken = () => {
@@ -27,6 +27,15 @@ const Feedback = () => {
     return localStorage.getItem("FEEDBACK_CUSTOMER_ID");
   };
 
+  const getFeedbackUsername = () => {
+    return localStorage.getItem("USERNAME");
+  };
+
+  const getDetails = () => {
+    return localStorage.getItem("DETAILS");
+  };
+
+
   let username = getToken();
   let feedbackid;
   React.useEffect(() => {
@@ -34,11 +43,12 @@ const Feedback = () => {
     if (username === "undefined" || username === null) {
       navigate("/");
     }
-    feedbackid = getFeedbackId();
-    getFeedbackByFeedbackId(feedbackid).then((response) => {
-      console.log("feedback ", response)
-      setDetail(response.data.detail)
-    })
+    setDetail(getDetails());
+    //let customerUsername = getFeedbackUsername();
+    // getFeedback(customerUsername).then((response) => {
+    //   console.log("feedback ", response)
+    //   //setDetail(response.data.detail)
+    // })
   }, []);
   
   const handleCancel = (e) => {
@@ -48,20 +58,24 @@ const Feedback = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const userid = getID();
-    let adminid;
-    const comment = response;
-    const date = new Date();
-    feedbackid = getFeedbackId();
-    getAdminID(userid).then((response) => {
-      console.log(response)
-      adminid = response.data
-      const data = {adminid,comment,date,feedbackid}
-      console.log("reply",data)
-      addReply(data).then((response) => {
-        navigate('/homepage')
-      })
+    const username = getFeedbackUsername();
+    const response = response_;
+    const details = getDetails();
+    const feedback = {details,response}
+    const data = {username, feedback}
+    console.log(data)
+    addResponse(data).then((response) => {
+      navigate('/homepage')
     })
+    // getAdminID(userid).then((response) => {
+    //   console.log(response)
+    //   adminid = response.data
+    //   const data = {adminid,comment,date,feedbackid}
+    //   console.log("reply",data)
+    //   addReply(data).then((response) => {
+    //     navigate('/homepage')
+    //   })
+    // })
     
 
   };
@@ -106,7 +120,7 @@ const Feedback = () => {
                     <InputTextarea value={detail} rows={6} cols={40} disabled />
                     <h5 style={{ textAlign: "center" }}>Enter your reply:</h5>
                     <InputTextarea
-                      value={response}
+                      value={response_}
                       onChange={(e) => setResponse(e.target.value)}
                       rows={10}
                       cols={40}

@@ -1,5 +1,92 @@
 import axios from "axios";
 
+
+
+export const getByCountry = async (countryName) => {
+  return await axios({
+    method: "POST",
+    url: "http://localhost:8081/getByCountry",
+    params: {countryName},
+  });
+};
+
+export const addResponse = async (data) => {
+  return await axios({
+    method: "POST",
+    url: "http://localhost:8081/addResponse",
+    data: data,
+  });
+};
+
+
+export const getFeedback = async (username) => {
+  return await axios({
+    method: "POST",
+    url: "http://localhost:8081/getFeedback",
+    params: {username}
+  });
+};
+
+export const getFeedbacks = async () => {
+  return await axios({
+    method: "GET",
+    url: "http://localhost:8081/getFeedbacks",
+  });
+};
+
+export const getFlaggedOnUsername = async (username) => {
+  return await axios({
+    method: "POST",
+    url: "http://localhost:8081/getFlaggedOnUsername",
+    params: { username },
+  });
+};
+
+export const deleteFlaggedAccount = async (username) => {
+  return axios({
+    method: "POST",
+    url: "http://localhost:8081/deleteFlaggedAccount",
+    params: { username },
+  });
+};
+
+export const deleteCustomer = async (username) => {
+  return axios({
+    method: "POST",
+    url: "http://localhost:8081/deleteCustomer",
+    params: { username },
+  });
+};
+
+const getFlaggedUsers = axios.create({
+  baseURL: "http://localhost:8081/getFlaggedList",
+})
+export default getFlaggedUsers;
+
+export const getCustomerOnUsername = async (username) => {
+  return axios({
+    method: "POST",
+    url: "http://localhost:8081/getCustomerOnUsername",
+    params: { username },
+  });
+};
+
+export const getFlaggedList = async () => {
+  return await axios({
+    method: "GET",
+    url: "http://localhost:8081/getFlaggedList",
+  });
+};
+
+export const addToFlaggedUser = (data) => {
+  return axios({
+    method: "POST",
+    url: "http://localhost:8081/addToFlaggedUser",
+    data: data,
+  });
+};
+
+
 export const getAllCustomers = () => {
   return axios({
     method: "GET",
@@ -173,13 +260,13 @@ export const totlaTransactions = async (virtualcardid) => {
   });
 };
 
-export const getFeedback = async (customerid) => {
-  return await axios({
-    method: "POST",
-    url: "http://localhost:8080/getFeedbackById",
-    params: { customerid },
-  });
-};
+// export const getFeedback = async (customerid) => {
+//   return await axios({
+//     method: "POST",
+//     url: "http://localhost:8080/getFeedbackById",
+//     params: { customerid },
+//   });
+// };
 
 export const adminCheck = async (userid) => {
   return await axios({
@@ -219,13 +306,13 @@ export const getAllCities = async () => {
   });
 };
 
-export const addToFlaggedUser = async (data) => {
-  return await axios({
-    method: "POST",
-    url: "http://localhost:8080/addToFlaggedUser",
-    data: data,
-  });
-};
+// export const addToFlaggedUser = async (data) => {
+//   return await axios({
+//     method: "POST",
+//     url: "http://localhost:8080/addToFlaggedUser",
+//     data: data,
+//   });
+// };
 
 export const getAdminID = async (userid) => {
   return await axios({

@@ -1,13 +1,10 @@
 package com.example.cardarmourbackendmongodb.Dto;
 
-import com.example.cardarmourbackendmongodb.Model.Feedback;
-
-import java.util.List;
-
 public class FeedbackDto {
 
     private String username;
-    private List<Feedback> feedback;
+    private String details;
+    private String response;
 
     public String getUsername() {
         return username;
@@ -17,11 +14,20 @@ public class FeedbackDto {
         this.username = username;
     }
 
-    public List<Feedback> getFeedback() {
-        return feedback;
+    public String getDetails() {
+        return details;
     }
 
-    public void setFeedback(List<Feedback> feedback) {
-        this.feedback = feedback;
+    public void setDetails(String details) {
+        this.details = details;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
     }
 }
+

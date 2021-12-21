@@ -1,5 +1,6 @@
 package com.example.cardarmourbackendmongodb.Controller;
 
+import com.example.cardarmourbackendmongodb.Dto.SingleFeedbackDto;
 import com.example.cardarmourbackendmongodb.Model.FlaggedAccount;
 import com.example.cardarmourbackendmongodb.Service.FlaggedUserService;
 import lombok.AllArgsConstructor;
@@ -28,5 +29,11 @@ public class FlaggedAccountController {
     public void delete(@RequestParam String username){
         flaggedUserService.deleteFromFlagged(username);
     }
+
+    @PostMapping("/getFlaggedOnUsername")
+    public FlaggedAccount getFlaggedOnUsername(@RequestParam String username){
+        return flaggedUserService.getFlaggedOnUsername(username);
+    }
+
 
 }

@@ -41,20 +41,20 @@ const Login = ({ loading, error, ...props }) => {
         props.setUser(response.data);
         navigate("/homepage");
       } else {
-        props.loginFailure("Bad Credentials! Try again");
+        props.loginFailure("Try again");
       }
     }).catch((err) => {
       if (err && err.response) {
         switch (err.response.status) {
           case 401:
             console.log("401 status");
-            props.loginFailure("Bad Credentials! Try again");
+            props.loginFailure("Try again");
             break;
           default:
-            props.loginFailure("Bad Credentials! Try again");
+            props.loginFailure("Try again");
         }
       } else {
-        props.loginFailure("Server Down");
+        props.loginFailure("Try again");
       }
     });
     // const data = { username, password };

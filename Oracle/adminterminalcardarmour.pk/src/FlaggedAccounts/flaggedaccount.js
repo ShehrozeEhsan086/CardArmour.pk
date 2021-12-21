@@ -132,7 +132,7 @@ const Cardhistory = () => {
         <br></br>
         <h5 className="ch">Flagged Accounts</h5>
       </div>
-      <div style={{ marginLeft: "15%", marginRight: "15%", marginTop: "2%" }}>
+      <div style={{ marginLeft: "10%", marginRight: "10%", marginTop: "2%" }}>
         <table className="customers">
           <tr
             style={{
@@ -146,6 +146,7 @@ const Cardhistory = () => {
             <th style={{ textAlign: "center" }}>Age</th>
             <th style={{ textAlign: "center" }}>Email</th>
             <th style={{ textAlign: "center" }}>Location</th>
+            <th style={{ textAlign: "center" }}>Reason</th>
             <th style={{ textAlign: "center" }}>Options</th>
           </tr>
           <tbody>
@@ -159,6 +160,7 @@ const Cardhistory = () => {
                 <td>{flaggedUser.age}</td>
                 <td>{flaggedUser.email}</td>
                 <td>{CheckCity(flaggedUser.cityid)}</td>
+                <td>{flaggedUser.reason}</td>
                 <td>
                   {" "}
                   <Button

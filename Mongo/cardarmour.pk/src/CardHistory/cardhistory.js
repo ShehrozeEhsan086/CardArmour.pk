@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
 import  React ,{useState} from "react";
 import { getTransactions } from "../api/authenticationService"
-import { totalSpending, totlaTransactions} from "../api/authenticationService"
+import { getSpending, getCountTransactions, totalSpending, totlaTransactions} from "../api/authenticationService"
 
 const Cardhistory = () => {
   const navigate = useNavigate();
@@ -30,6 +30,14 @@ const Cardhistory = () => {
     getTransactions(username).then((response) => {
       const transactionList = response.data
       setTransactions(transactionList);
+    })
+    getSpending(username).then((response) => {
+      console.log("spending",response)
+      setTotalSpending(response.data)
+    })
+    getCountTransactions(username).then((response) => {
+      console.log(response)
+      setTotalTransactions(response.data)
     })
     // getTransactions(cardid).then((response) => {
     //   const transactionList = response.data
